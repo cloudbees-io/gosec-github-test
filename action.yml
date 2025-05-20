@@ -63,7 +63,7 @@ runs:
           -e RUN_ID="${{ github.run_id }}" \
           -e JOB_ID="${{ github.job }}" \
           -e STEP_ID="${{ inputs.step-id }}" \
-          public.ecr.aws/l7o7z1g8/actions/assets-scc-scanner:1a81610bbb3d6e6f2c4586f21d85638e56718a70 \
+          public.ecr.aws/l7o7z1g8/actions/assets-gosec-scanner:4af54a188305753de18e08fe63e2542430cd2c93 \
           --mode single
 
     - name: Complete execution plan
