@@ -1,4 +1,4 @@
-name: gitleaks-hybrid
+name: gosec-hybrid
 description: Run gitleaks compliance scan with CloudBees hybrid integration
 
 inputs:
@@ -35,7 +35,6 @@ runs:
       run: |
         docker run --rm \
           -v $GITHUB_WORKSPACE:$GITHUB_WORKSPACE \
-          -e INPUT_CLOUDBEES_API_TOKEN="${{ inputs.cloudbees-pat }}" \
           -e INPUT_CLOUDBEES_API_URL="${{ inputs.cloudbees-url }}" \
           -e INPUT_RUN_ID="${{ github.run_id }}" \
           -e INPUT_IS_GITHUB_WORKFLOW="true" \
@@ -50,6 +49,8 @@ runs:
           -e GITHUB_PROVIDER="GITHUB" \
           -e GITHUB_WORKSPACE="${{ github.workspace }}" \
           -e GITHUB_ENV="$GITHUB_ENV" \
+          -e ACTIONS_ID_TOKEN_REQUEST_TOKEN=$ACTIONS_ID_TOKEN_REQUEST_TOKEN \
+          -e ACTIONS_ID_TOKEN_REQUEST_URL=$ACTIONS_ID_TOKEN_REQUEST_URL \
           public.ecr.aws/l7o7z1g8/actions/assets-plugin-chain-utils:0dea78066b1aecbca8a3a6674aade8ee49b5d57a \
           generate-references --asset-type "CODE"
 
@@ -63,7 +64,7 @@ runs:
           -e RUN_ID="${{ github.run_id }}" \
           -e JOB_ID="${{ github.job }}" \
           -e STEP_ID="${{ inputs.step-id }}" \
-          public.ecr.aws/l7o7z1g8/actions/assets-scc-scanner:1a81610bbb3d6e6f2c4586f21d85638e56718a70 \
+          public.ecr.aws/l7o7z1g8/actions/assets-gosec-scanner:3dd9baf6d218cf37f8b02df53b29982008f69476 \
           --mode single
 
     - name: Complete execution plan
@@ -71,7 +72,6 @@ runs:
       run: |
        docker run --rm \
           -v $GITHUB_WORKSPACE:$GITHUB_WORKSPACE \
-          -e INPUT_CLOUDBEES_API_TOKEN="${{ inputs.cloudbees-pat }}" \
           -e INPUT_CLOUDBEES_API_URL="${{ inputs.cloudbees-url }}" \
           -e INPUT_RUN_ID="${{ github.run_id }}" \
           -e INPUT_IS_GITHUB_WORKFLOW="true" \
@@ -86,5 +86,7 @@ runs:
           -e GITHUB_PROVIDER="GITHUB" \
           -e GITHUB_WORKSPACE="${{ github.workspace }}" \
           -e GITHUB_ENV="$GITHUB_ENV" \
+          -e ACTIONS_ID_TOKEN_REQUEST_TOKEN=$ACTIONS_ID_TOKEN_REQUEST_TOKEN \
+          -e ACTIONS_ID_TOKEN_REQUEST_URL=$ACTIONS_ID_TOKEN_REQUEST_URL \
           public.ecr.aws/l7o7z1g8/actions/assets-plugin-chain-utils:0dea78066b1aecbca8a3a6674aade8ee49b5d57a \
           process-outputs
